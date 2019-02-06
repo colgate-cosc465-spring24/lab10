@@ -13,7 +13,7 @@ def main():
     arg_parser.add_argument('-h', '--hostname', dest='hostname', action='store',
             type=str, required=True, help='Remote hostname')
     arg_parser.add_argument('-l', '--loss', dest='loss_probability', 
-            action='store', type=float, help='Loss probability')
+            action='store', type=float, default=0.0, help='Loss probability')
     settings = arg_parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG, 
