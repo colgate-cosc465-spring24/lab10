@@ -18,7 +18,8 @@ def main():
     logging.basicConfig(level=logging.DEBUG, 
             format='%(levelname)s: %(message)s')
 
-    receiver = swp.SWPReceiver((settings.hostname, settings.port))
+    receiver = swp.SWPReceiver((settings.hostname, settings.port), 
+            settings.loss_probability)
     while True:
         data = receiver.recv().decode()
         print('%s' % data)
