@@ -2,7 +2,7 @@
 
 from argparse import ArgumentParser
 import logging
-import swp
+import sliding_window
 
 def main():
     # Parse arguments
@@ -18,7 +18,7 @@ def main():
     logging.basicConfig(level=logging.DEBUG, 
             format='%(levelname)s: %(message)s')
 
-    receiver = swp.SWPReceiver((settings.hostname, settings.port), 
+    receiver = sliding_window.Receiver((settings.hostname, settings.port), 
             settings.loss_probability)
     while True:
         data = receiver.recv().decode()

@@ -2,7 +2,7 @@ import logging
 import random
 import socket
 
-class LLPEndpoint:
+class LowerLayerEndpoint:
     def __init__(self, local_address=None, remote_address=None, 
             loss_probability=0):
         self._local_address = local_address
@@ -19,34 +19,31 @@ class LLPEndpoint:
         self._shutdown = False
 
     def send(self, raw_bytes):
-        logging.debug('LLP sent: %s' % raw_bytes)
-        return self._socket.send(raw_bytes)
+        if random.random() >= self._loss_probability:
+            result = self._socket.send(raw_bytes)
+            logging.debug('Lower layer sent: %s' % raw_bytes)
+            return result
+        else:
+            logging.debug('Lower layer dropped: %s' % raw_bytes)
 
     def recv(self, max_size=4096):
-        dropped = True
-        while dropped:
-            if self._remote_address is None:
-                try:
-                    (raw_bytes, address) = self._socket.recvfrom(max_size)
-                except OSError:
-                    return None
-                self._remote_address = address
-                self._socket.connect(self._remote_address)
-            else:
-                try:
-                    raw_bytes = self._socket.recv(max_size)
-                except OSError:
-                    return None
-
-            if len(raw_bytes) == 0:
+        if self._remote_address is None:
+            try:
+                (raw_bytes, address) = self._socket.recvfrom(max_size)
+            except OSError:
+                return None
+            self._remote_address = address
+            self._socket.connect(self._remote_address)
+        else:
+            try:
+                raw_bytes = self._socket.recv(max_size)
+            except OSError:
                 return None
 
-            if random.random() >= self._loss_probability:
-                dropped = False
-            else:
-                logging.debug('LLP dropped: %s' % raw_bytes)
+        if len(raw_bytes) == 0:
+            return None
         
-        logging.debug('LLP received: %s' % raw_bytes)
+        logging.debug('Lower layer received: %s' % raw_bytes)
         return raw_bytes
 
     def shutdown(self):
