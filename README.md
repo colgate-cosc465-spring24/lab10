@@ -36,4 +36,4 @@ By default, the server consumes data as soon as it is available. To change how f
 By default, the receiver's buffer size is 5. To change the receiver's buffer size, include the command line argument `-b SIZE` when you start the server. Replace `SIZE` with a positive integer value.
 
 ## Self-assessment
-The self-assessment for this lab will be available on Moodle on Friday, April 19th. Please complete the self-assessment by 11pm on Monday, April 22nd.
+The self-assessment for this lab will be available on Moodle this week. Please complete the self-assessment by 11pm on Monday, April 22nd.
